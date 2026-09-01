@@ -3,8 +3,8 @@ function plot_ensaios_pz4000()
 % cada um com 3 subplots (Plot 0, Plot 1, Plot 2) e eixo X de 0 a 100000.
 
     arquivos = {
-        'Ensaio_PZ4000_Tensao_SemJiga_SemCarga.txt',   'Tensão (V)';
-        'Ensaio_PZ4000_Corrente_SemJiga_SemCarga.txt', 'Corrente (A)'
+        'Ensaio_PZ4000_Tensao_ComJiga_SemCarga.txt',   'Tensão (V)';
+        'Ensaio_PZ4000_Corrente_ComJiga_SemCarga.txt', 'Corrente (A)'
     };
 
     for k = 1:size(arquivos, 1)
