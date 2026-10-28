@@ -2,7 +2,7 @@ function plot_saida_conversor_bracos()
 % Mesma logica do plot_barramento_cc_bracos, mas para a coluna 1 dos
 % CSVs (suspeita de ser a saida do conversor/inversor, chaveada em PWM).
 % A janela de suavizacao e escolhida para coincidir com o periodo da
-% portadora de chaveamento (~500 Hz), revelando o envelope da moduladora.
+% portadora de chaveamento (~5 kHz), revelando o envelope da moduladora.
 
     ordemBracos = 7:-1:0;
 
@@ -33,9 +33,9 @@ function plot_grupo(pasta, padraoArquivo, ordemBracos, nomeGrupo)
 
     x = 0:(numel(saida) - 1);
 
-    Fs = 100000; % Hz (100000 amostras por segundo)
+    Fs = 1e6; % Hz (1 MS/s no PZ4000: 100.000 amostras = janela de 0,1 s)
 
-    janelaFiltro = round(Fs / 500); % ~1 periodo da portadora de chaveamento (~500 Hz)
+    janelaFiltro = round(Fs / 5000); % ~1 periodo da portadora de chaveamento (~5 kHz)
     saidaFiltrada = movmean(saida, janelaFiltro);
 
     media         = zeros(size(saida));

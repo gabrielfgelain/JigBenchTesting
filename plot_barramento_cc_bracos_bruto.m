@@ -33,8 +33,8 @@ function plot_grupo(pasta, padraoArquivo, ordemBracos, nomeGrupo)
         tensao = [tensao; v]; %#ok<AGROW>
     end
 
-    Fs = 100000; % Hz (100000 amostras por segundo)
-    janelaOutlier = round(0.001 * Fs); % 1 ms de mediana movel
+    Fs = 1e6; % Hz (1 MS/s no PZ4000: 100.000 amostras = janela de 0,1 s)
+    janelaOutlier = round(0.0001 * Fs); % 0,1 ms de mediana movel
 
     tensaoSemOutliers = filloutliers(tensao, 'linear', 'movmedian', janelaOutlier);
 

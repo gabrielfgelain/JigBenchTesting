@@ -1,0 +1,55 @@
+% Fig. 1 do artigo (ICIT 2027): evolucao ilustrativa de C e ESR e o criterio de EOL.
+% Substitui o EOL.png. Preambulo: \usepackage[americanvoltages,americanresistors]{circuitikz}
+
+\begin{figure}[!t]
+\centering
+\resizebox{0.85\columnwidth}{!}{%
+\begin{tikzpicture}[font=\footnotesize, >=latex]
+% ---------------- blocos do conversor ----------------
+\begin{scope}[yshift=-0.9cm]
+\ctikzset{bipoles/length=0.5cm}
+\draw (0,5.3) to[sV] (0,6.1);
+\node at (0,6.35) {Grid};
+\draw (0,6.1) -- (0.3,6.1) (0,5.3) -- (0.3,5.3);
+\draw[thick] (0.3,5.2) rectangle (1.9,6.2) node[midway, align=center] {Rectifier};
+\draw[thick, fill=blue!8, draw=blue!60!black] (2.4,5.2) rectangle (4.0,6.2);
+\node[align=center] at (3.2,5.95) {DC link};
+\draw[blue!60!black, thick] (2.95,5.55) -- (3.45,5.55) (2.95,5.43) -- (3.45,5.43);
+\draw[blue!60!black] (3.2,5.55) -- (3.2,5.7) (3.2,5.43) -- (3.2,5.28);
+\draw[thick] (4.5,5.2) rectangle (6.1,6.2) node[midway, align=center] {Inverter};
+\draw (6.95,5.7) circle (0.32) node {M};
+\foreach \a/\b in {1.9/2.4, 4.0/4.5} { \draw (\a,5.9) -- (\b,5.9); \draw (\a,5.5) -- (\b,5.5); }
+\draw (6.1,5.7) -- (6.63,5.7);
+\draw[->, thick, blue!60!black] (3.2,5.2) -- (3.2,4.75);
+\end{scope}
+% ---------------- curvas de degradacao ----------------
+% g(t) = (exp(3t)-1)/(exp(3)-1), crescimento acelerado (ilustrativo)
+% C:   y = 3.4 - 0.7 g/g(0.6)  -> cruza C_EOL (y = 2.7) em t = 0.6 (EOL)
+% ESR: y = 0.3 + 0.8 g/g(0.8)  -> cruza ESR_EOL (y = 1.1) em t = 0.8, depois da C
+% (as duas curvas se cruzam em t ~ 0.9, y ~ 1.4, longe das linhas de EOL)
+\def\W{7.0}
+\draw[thick] (0,0) rectangle (\W,3.8);
+\draw[blue!60!black, dashed] (0,2.7) -- (\W,2.7);
+\draw[red!70!black, dashed] (0,1.1) -- (\W,1.1);
+\draw[blue!60!black, very thick, domain=0:0.95, samples=80] plot ({\x*\W}, {3.4 - 0.7*((exp(3*\x)-1)/(exp(3)-1))/0.2645});
+\draw[red!70!black, very thick, domain=0:0.95, samples=80] plot ({\x*\W}, {0.3 + 0.8*((exp(3*\x)-1)/(exp(3)-1))/0.5249});
+\node[anchor=east] at (0,3.4) {$C_0$};
+\node[anchor=east] at (0,2.7) {$C_{\mathrm{EOL}}$};
+\node[anchor=east] at (0,1.1) {$\mathrm{ESR}_{\mathrm{EOL}}$};
+\node[anchor=east] at (0,0.3) {$\mathrm{ESR}_0$};
+\node[blue!60!black, anchor=north west] at (0.3,3.3) {$C(t)$};
+\node[red!70!black, anchor=south west] at (0.15,0.35) {$\mathrm{ESR}(t)$};
+% cruzamentos: C antes (EOL), ESR depois
+\draw[blue!60!black, dashed] (0.6*\W,0) -- (0.6*\W,2.7);
+\fill[blue!60!black] (0.6*\W,2.7) circle (0.05);
+\draw[red!70!black, dashed] (0.8*\W,0) -- (0.8*\W,1.1);
+\fill[red!70!black] (0.8*\W,1.1) circle (0.05);
+% espaco invisivel a direita, do tamanho dos rotulos da esquerda, para centralizar o grafico
+\path (\W+1.35,0);
+\node[anchor=north] at (0.6*\W,0) {EOL};
+\node[anchor=north east] at (\W,0) {Operating time};
+\end{tikzpicture}%
+}
+\caption{Illustrative evolution of the capacitance and ESR of a dc-link AEC during its operating life and the EOL criterion.}
+\label{fig:eol}
+\end{figure}

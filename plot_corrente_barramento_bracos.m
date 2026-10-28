@@ -31,12 +31,12 @@ function plot_grupo(pasta, padraoArquivo, ordemBracos, nomeGrupo)
         corrente = [corrente; v]; %#ok<AGROW>
     end
 
-    Fs = 100000; % Hz (100000 amostras por segundo)
+    Fs = 1e6; % Hz (1 MS/s no PZ4000: 100.000 amostras = janela de 0,1 s)
 
     janelaOutlier = 20; % amostras, remove os picos pontuais de saturacao
     correnteSemPicos = filloutliers(corrente, 'linear', 'movmedian', janelaOutlier);
 
-    janelaFiltro = round(Fs / 500); % ~1 periodo da portadora de chaveamento (~500 Hz)
+    janelaFiltro = round(Fs / 5000); % ~1 periodo da portadora de chaveamento (~5 kHz)
     correnteFiltrada = movmean(correnteSemPicos, janelaFiltro);
 
     x = 0:(numel(corrente) - 1);

@@ -39,7 +39,7 @@ Ensaios "sem carga" a 3000 RPM, varrendo de 7 a 0 braços de capacitância ativo
 - `SemCarga_3000RPM_2068/` — grupo "RSE2068"
 - `MotorDesligado/` — ensaios de referência com motor ligado vs. desligado (sem chaveamento)
 
-Cada CSV tem 100.001 amostras (janela de observação de 1 s a 100 kHz), sem cabeçalho, separador
+Cada CSV tem 100.001 amostras (janela de observação de 0,1 s a 1 MS/s, confirmado no PZ4000), sem cabeçalho, separador
 `;`, decimal `,`, 6 colunas (3 tensões + 3 correntes). **Coluna 2 = tensão do barramento CC**,
 confirmada contra um segundo instrumento (wattímetro WT320) e usada como referência nas análises.
 O canal antes assumido como "corrente do barramento" (coluna 5 nos scripts) na verdade mede a
@@ -60,6 +60,7 @@ Todos assumem que o CSV/TXT referenciado está na mesma pasta do script (caminho
 | `plot_corrente_barramento_bracos.m` | Mesmo formato, aplicado à coluna 5 — **nome desatualizado**: esse canal é a corrente de saída do inversor, não do barramento (ver nota acima). |
 | `plot_motor_ligado_desligado.m` | Compara os 4 ensaios de `MotorDesligado/` lado a lado, focando nos picos de tensão/corrente. |
 | `plot_teste.m` | Plota `teste.csv` (ensaio com carga no eixo) e sobrepõe a referência sem carga (7 braços) na tensão do barramento. |
+| `plot_logs_ensaio.m` | Logs de sessão de `Logs/` (PID de potência/ETMI, freio de histerese e wattímetro) gravados a partir de um instante (padrão 2026-09-21 13:30), com eixo em horário de relógio. Nos logs com `n_bracos`/`n_res`, plota também a configuração ao longo do tempo e o regime permanente por configuração. |
 
 ## Como rodar
 
@@ -110,7 +111,7 @@ evitando misturar variabilidade térmica com o efeito da capacitância.
 
 | Item | Detalhe |
 |---|---|
-| Yokogawa PZ4000 | Driver oficial + VIs customizados em `pz_analyzer_gelain.llb`. Modo waveform: buffer de 100.000 pontos/canal, janela de observação de 1 s (100 kHz). |
+| Yokogawa PZ4000 | Driver oficial + VIs customizados em `pz_analyzer_gelain.llb`. Modo waveform: buffer de 100.000 pontos/canal, janela de observação de 0,1 s (1 MS/s). |
 | DAQ — Braços de capacitores | 7 saídas digitais, ativas em HIGH. Quantidade ativa definida por `Qtd_Bracos_Ativos` (0–7), fixada antes de cada ensaio. |
 | DAQ — Pré-carga | 7 saídas digitais, ativas em LOW. |
 | DAQ — Braços de resistores | 4 saídas digitais, porta própria. Controle manual a qualquer momento. |
@@ -173,7 +174,9 @@ na documentação técnica completa do projeto:
 - **Coluna 2 — barramento CC.** Praticamente constante (~305-310 V), com resolução grosseira
   (~1,22 V por degrau — quantização do instrumento, não ruído real). Ripple cresce de forma
   monotônica conforme menos braços de capacitores estão ativos (ex.: ~0,86 V com 7 braços até
-  ~1,34 V com 0 braços), coerente com simulação prévia do grupo de pesquisa.
+  ~1,34 V com 0 braços), coerente com simulação prévia do grupo de pesquisa. Como a entrada do
+  inversor é monofásica, esse ripple fica em **120 Hz** (2 × 60 Hz da rede) e harmônicas
+  (240, 360 Hz…), vindo do retificador, e não da saída trifásica.
 - **Coluna 1 — saída do conversor/inversor.** Onda PWM chaveada, amplitude RMS ~160 V batendo
   com a leitura de um wattímetro WT320 (~162 V) com o motor girando. Some quase por completo com
   o motor desligado.

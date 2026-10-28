@@ -33,9 +33,9 @@ function plot_grupo(pasta, padraoArquivo, ordemBracos, nomeGrupo)
 
     x = 0:(numel(tensao) - 1);
 
-    Fs = 100000; % Hz (100000 amostras por segundo)
+    Fs = 1e6; % Hz (1 MS/s no PZ4000: 100.000 amostras = janela de 0,1 s)
 
-    janelaFiltro = round(0.00005 * Fs); % 0,5 ms, so para suavizar a curva e o Vpp
+    janelaFiltro = round(0.000005 * Fs); % 5 us, so para suavizar a curva e o Vpp
     tensaoFiltrada = movmean(tensao, janelaFiltro);
 
     media         = zeros(size(tensao));
