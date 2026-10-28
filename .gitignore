@@ -1,0 +1,13 @@
+# LabVIEW: per-machine project files
+*.lvlps
+*.aliases
+
+# Test data lives in the JigBenchDataset repository (DVC)
+Test_Data/
+Dados_Ensaios/
+*.csv
+*.txt
+
+# Office lock files
+.~lock*
+~$*
