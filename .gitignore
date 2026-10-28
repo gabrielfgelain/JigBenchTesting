@@ -11,3 +11,6 @@ Dados_Ensaios/
 # Office lock files
 .~lock*
 ~$*
+
+# Test plan read by the LabVIEW sequencer
+!test_plan/*.csv
